@@ -17,52 +17,121 @@ function computerPlay(){
   }
 }
 
+function plrWin(plrSelection, compSelection){
+  plrScore++;
+  const score = document.querySelector('#plrscore .score');
+  score.textContent = plrScore;
+  const container = document.querySelector('#main-container');
+  const myElement = document.createElement('div');
+  myElement.textContent = `Computer selected ${compSelection} | You selected ${plrSelection} | You won this round.`;
+  myElement.style.cssText = "margin-top: 6px;";
+  container.appendChild(myElement);
+}
+
+function plrLose(plrSelection, compSelection){
+  compScore++;
+  const score = document.querySelector('#compscore .score');
+  score.textContent = compScore;
+
+  const container = document.querySelector('#main-container');
+  const myElement = document.createElement('div');
+  myElement.textContent = `Computer selected ${compSelection} | You selected ${plrSelection} | You lost this round.`;
+  myElement.style.cssText = "margin-top: 6px;";
+  container.appendChild(myElement);
+}
+
+function tie(plrSelection, compSelection){
+  const container = document.querySelector('#main-container');
+  const myElement = document.createElement('div');
+  myElement.textContent = `Computer selected ${compSelection} | You selected ${plrSelection} | It's a tie.`;
+  myElement.style.cssText = "margin-top: 6px;";
+  container.appendChild(myElement);
+}
+
 function playRound(playerSelection, computerSelection){
   let plrSelection = playerSelection.toLowerCase();
   let compSelection = computerSelection.toLowerCase();
-  const tie = "It's a tie."
-  const plrWin = "You won this round."
-  const plrLose = "You lost this round."
 
   if(plrSelection === compSelection){
-    return tie
+    return tie(plrSelection, compSelection);
   }
   if(compSelection === 'rock'){
     switch (plrSelection){
       case 'paper':
-        plrScore++;
-        return plrWin;
+        plrWin(plrSelection, compSelection);
+        return;
       case 'scissor':
-        compScore++;
-        return plrLose;
+        plrLose(plrSelection, compSelection);
+        return;
       default:
         return "Invalid Player's input."
     }
   } else if(compSelection === 'paper'){
     switch (plrSelection) {
       case 'rock':
-        compScore++;
-        return plrLose
+        plrLose(plrSelection, compSelection);
+        return;
       case 'scissor':
-        plrScore++;
-        return plrWin
+        plrWin(plrSelection, compSelection);
+        return;
       default:
         return "Invalid Player's input."
     }
   } else if(compSelection === 'scissor'){
     switch (plrSelection) {
       case 'rock':
-        plrScore++;
-        return plrWin;
+        plrWin(plrSelection, compSelection);
+        return;
       case 'paper':
-        compScore++;
-        return plrLose;
+        plrLose(plrSelection, compSelection);
+        return;
       default:
         return "Invalid Player's input."
     }
   } else {
     return "Invalid Computer's Input"
   }
+}
+
+
+const rockChoice = document.querySelector(".button[data-choice='rock']");
+const paperChoice = document.querySelector(".button[data-choice='paper']");
+const scissorChoice = document.querySelector(".button[data-choice='scissor']");
+
+
+rockChoice.addEventListener('click', selectRock);
+paperChoice.addEventListener('click', selectPaper);
+scissorChoice.addEventListener('click', selectScissor);
+
+function selectRock(){
+  rockChoice.classList.add('buttonTap');
+  setTimeout(() => {
+    rockChoice.classList.remove('buttonTap');
+  }, 200);
+
+  const computerSelection = computerPlay();
+  const playerSelection = 'rock';
+  playRound(playerSelection, computerSelection);
+}
+function selectPaper(){
+  paperChoice.classList.add('buttonTap');
+  setTimeout(() => {
+    paperChoice.classList.remove('buttonTap');
+  }, 200);
+
+  const computerSelection = computerPlay();
+  const playerSelection = 'paper';
+  playRound(playerSelection, computerSelection);
+}
+function selectScissor(){
+  scissorChoice.classList.add('buttonTap');
+  setTimeout(() => {
+    scissorChoice.classList.remove('buttonTap');
+  }, 200);
+
+  const computerSelection = computerPlay();
+  const playerSelection = 'scissor';
+  playRound(playerSelection, computerSelection);
 }
 
 function game(){
@@ -86,4 +155,3 @@ function game(){
 }
 
 console.log('WORKING')
-console.log(game());
